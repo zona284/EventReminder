@@ -38,12 +38,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":notification"))
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.koin)
+    implementation(libs.androidx.workmanager)
 
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)

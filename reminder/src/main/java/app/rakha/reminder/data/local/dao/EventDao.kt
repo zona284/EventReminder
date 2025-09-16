@@ -1,7 +1,6 @@
 package app.rakha.reminder.data.local.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,7 +15,7 @@ interface EventDao {
     @Query("SELECT * FROM events")
     fun getEvents(): Flow<List<EventEntity>>
 
-    @Delete
-    fun deleteEvent(event: EventEntity)
+    @Query("DELETE FROM events WHERE uid=:uid")
+    suspend fun deleteEvent(uid: String)
 
 }

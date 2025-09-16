@@ -8,12 +8,13 @@ import app.rakha.reminder.data.model.EventModel
 data class EventEntity (
     @PrimaryKey(autoGenerate = true)
     val id: Int ? = null,
+    val uid: String,
     val title: String,
     val eventTime: String,
 )
 
 fun EventEntity.toEventModel() = EventModel(
-    id = id ?: 0,
+    uid = uid,
     title = title,
     eventTime = eventTime
 )

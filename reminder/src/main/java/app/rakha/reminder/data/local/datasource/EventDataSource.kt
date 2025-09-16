@@ -25,7 +25,7 @@ class EventDataSourceImpl(private val eventDao: EventDao) : EventDataSource {
     }
 
     override suspend fun deleteEvent(eventModel: EventModel) {
-        eventDao.deleteEvent(eventModel.toEventEntity())
+        eventDao.deleteEvent(eventModel.uid)
     }
 
 }

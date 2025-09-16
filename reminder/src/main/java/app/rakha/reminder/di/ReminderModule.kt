@@ -9,12 +9,17 @@ import app.rakha.reminder.data.repository.EventRepository
 import app.rakha.reminder.data.repository.EventRepositoryImpl
 import app.rakha.reminder.ui.form.ReminderFormViewModel
 import app.rakha.reminder.ui.list.ReminderViewModel
+import app.rakha.reminder.worker.ReminderNotificationWorker
+import app.rakha.reminder.worker.ReminderScheduleWorker
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.workmanager.dsl.workerOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 object ReminderModule {
-    fun getModules() = listOf(database, dao, dataSource, repository, viewModel)
+    fun getModules() = module {
+        includes(database, dao, dataSource, repository, viewModel, workers)
+    }
 
     private val database = module {
         single {
@@ -41,5 +46,10 @@ object ReminderModule {
     private val viewModel = module {
         viewModelOf(::ReminderViewModel)
         viewModelOf(::ReminderFormViewModel)
+    }
+
+    private val workers = module {
+        workerOf(::ReminderScheduleWorker)
+        workerOf(::ReminderNotificationWorker)
     }
 }

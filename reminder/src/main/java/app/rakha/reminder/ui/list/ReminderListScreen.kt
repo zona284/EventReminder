@@ -15,17 +15,22 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -88,11 +93,12 @@ fun ReminderListScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(allEvents, key = { it.id ?: 0 }) { event ->
+                items(allEvents, key = { it.uid }) { event ->
                     EventItem(
                         event = event,
-                        onClick = {
-                            Toast.makeText(context, event.title, Toast.LENGTH_SHORT).show()
+                        onDeleteEvent = {
+                            viewModel.deleteEvent(event)
+                            Toast.makeText(context, "Deleted ${event.title}", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
@@ -104,13 +110,18 @@ fun ReminderListScreen(
 @Composable
 fun EventItem(
     event: EventModel,
-    onClick: () -> Unit
+    onDeleteEvent: () -> Unit
 ) {
+
+    var showDeleteIcon by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp)),
-        onClick = onClick,
+        onClick = {
+            showDeleteIcon = !showDeleteIcon
+        },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -124,7 +135,7 @@ fun EventItem(
                 text = event.title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1,
+                maxLines = if(showDeleteIcon) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
             )
@@ -137,6 +148,13 @@ fun EventItem(
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Medium
             )
+
+            if(showDeleteIcon) {
+                Spacer(modifier = Modifier.width(16.dp))
+                IconButton(onClick = onDeleteEvent) {
+                    Icon(Icons.Filled.Delete, contentDescription = "Delete")
+                }
+            }
         }
     }
 }

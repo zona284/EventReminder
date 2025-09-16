@@ -1,12 +1,17 @@
-package app.rakha.eventreminder
+package app.rakha.eventreminder.activity
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,14 +22,37 @@ import app.rakha.reminder.ui.form.ReminderFormScreen
 import app.rakha.reminder.ui.list.ReminderListScreen
 
 class MainActivity : ComponentActivity() {
+
+    private val requestNotification = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (!isGranted) {
+            Toast.makeText(this, "Notification permission is required", Toast.LENGTH_SHORT).show()
+            checkNotificationPermission()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        checkNotificationPermission()
         enableEdgeToEdge()
         setContent {
             EventReminderTheme {
                 ReminderAppScreen()
             }
         }
+    }
+
+    private fun checkNotificationPermission() {
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        if (ContextCompat.checkSelfPermission(
+                this,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED ||
+            shouldShowRequestPermissionRationale(permission)
+        ) return
+
+        requestNotification.launch(permission)
     }
 }
 
