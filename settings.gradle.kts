@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "EventReminder"
 include(":app")
- 
+include(":notification")
+include(":reminder")

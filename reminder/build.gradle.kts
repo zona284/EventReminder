@@ -1,21 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "app.rakha.eventreminder"
+    namespace = "app.rakha.reminder"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "app.rakha.eventreminder"
         minSdk = 26
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -40,15 +38,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":reminder"))
-    implementation(project(":notification"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
-    implementation(libs.androidx.compose.navigation)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.koin)
+
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 
 }
