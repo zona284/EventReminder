@@ -7,19 +7,20 @@ import androidx.lifecycle.viewModelScope
 import app.rakha.reminder.data.model.EventModel
 import app.rakha.reminder.data.repository.EventRepository
 import app.rakha.reminder.worker.ReminderNotificationWorker
+import app.rakha.reminder.worker.ReminderWorkerManager
 import kotlinx.coroutines.launch
 
 class ReminderViewModel(
-    private val context: Context,
+    private val reminderWorkerManager: ReminderWorkerManager,
     private val repository: EventRepository
 ): ViewModel() {
-    val reminderEvents = repository.getEvents()
 
     fun deleteEvent(event: EventModel) {
         viewModelScope.launch {
-            Log.d("ReminderViewModel", "Deleting event with UID: ${event.uid}")
             repository.deleteEvent(event)
-            ReminderNotificationWorker.cancel(context, event.uid)
+            reminderWorkerManager.cancelNotificationWorker( event.uid)
+            Log.d("ReminderViewModel", "Deleting event with UID: ${event.uid}")
         }
     }
+    val reminderEvents = repository.getEvents()
 }

@@ -34,7 +34,7 @@ class ReminderNotificationWorker(
         const val EVENT_ID = "EVENT_ID"
         const val EVENT_NAME = "EVENT_NAME"
 
-        fun run(context: Context, eventId: String, eventName: String, delayInMillis: Long) {
+        internal fun run(context: Context, eventId: String, eventName: String, delayInMillis: Long) {
             val request =
                 OneTimeWorkRequestBuilder<ReminderNotificationWorker>()
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 15, TimeUnit.MINUTES)
@@ -58,7 +58,7 @@ class ReminderNotificationWorker(
             Log.d("ReminderNotificationWorker", "Worker created for $eventId-$eventName: ${work.result}")
         }
 
-        fun cancel(context: Context, eventId: String) {
+        internal fun cancel(context: Context, eventId: String) {
             WorkManager.getInstance(context).cancelUniqueWork("worker-$eventId")
             Log.d("ReminderNotificationWorker", "Worker canceled for $eventId")
         }

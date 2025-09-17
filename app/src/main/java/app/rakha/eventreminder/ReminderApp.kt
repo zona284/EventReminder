@@ -3,12 +3,15 @@ package app.rakha.eventreminder
 import android.app.Application
 import app.rakha.notification.NotificationModule
 import app.rakha.reminder.di.ReminderModule
-import app.rakha.reminder.worker.ReminderScheduleWorker
+import app.rakha.reminder.worker.ReminderWorkerManager
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
 
 class ReminderApp: Application() {
+
+    private val reminderWorkerManager by inject<ReminderWorkerManager>()
 
     override fun onCreate() {
         super.onCreate()
@@ -22,6 +25,6 @@ class ReminderApp: Application() {
     }
 
     private fun startReminderSchedule() {
-        ReminderScheduleWorker.run(this@ReminderApp)
+        reminderWorkerManager.startReminderSchedule()
     }
 }

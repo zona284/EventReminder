@@ -11,6 +11,7 @@ import app.rakha.reminder.ui.form.ReminderFormViewModel
 import app.rakha.reminder.ui.list.ReminderViewModel
 import app.rakha.reminder.worker.ReminderNotificationWorker
 import app.rakha.reminder.worker.ReminderScheduleWorker
+import app.rakha.reminder.worker.ReminderWorkerManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.workmanager.dsl.workerOf
 import org.koin.core.module.dsl.viewModelOf
@@ -49,6 +50,7 @@ object ReminderModule {
     }
 
     private val workers = module {
+        single { ReminderWorkerManager(get()) }
         workerOf(::ReminderScheduleWorker)
         workerOf(::ReminderNotificationWorker)
     }

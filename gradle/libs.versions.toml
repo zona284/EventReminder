@@ -17,6 +17,7 @@ material = "1.13.0"
 navigation = "2.9.4"
 workManager = "2.10.4"
 startUp = "1.2.0"
+mockk = "1.14.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,6 +41,7 @@ androidx_workmanager = { module = "androidx.work:work-runtime-ktx", version.ref 
 # Coroutines
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # Koin
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
@@ -54,6 +56,8 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -65,4 +69,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 compose = ["androidx-activity-compose", "androidx-compose-material3", "androidx-compose-ui", "androidx-compose-ui-graphics", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview"]
 coroutines = ["coroutines-core", "coroutines-android"]
 koin = ["koin-android", "koin-compose", "koin-workmanager"]
+test = ["junit", "androidx-compose-ui-test-junit4", "coroutines-test", "mockk"]
 

@@ -38,7 +38,7 @@ class ReminderScheduleWorker(
     companion object {
         const val WORKER_TAG = "ReminderScheduleWorker"
 
-        fun run(context: Context) {
+        internal fun run(context: Context) {
             val request = PeriodicWorkRequestBuilder<ReminderScheduleWorker>(30, TimeUnit.MINUTES)
                 .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.MINUTES)
                 .addTag(WORKER_TAG)

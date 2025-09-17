@@ -1,12 +1,10 @@
 package app.rakha.reminder.ui.form
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.rakha.reminder.ReminderTimeUtils
 import app.rakha.reminder.data.model.EventModel
 import app.rakha.reminder.data.repository.EventRepository
-import app.rakha.reminder.worker.ReminderNotificationWorker
+import app.rakha.reminder.worker.ReminderWorkerManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ReminderFormViewModel(
-    private val context: Context,
+    private val reminderWorkerManager: ReminderWorkerManager,
     private val repository: EventRepository
 ) : ViewModel() {
     private val _title = MutableStateFlow("")
@@ -48,20 +46,11 @@ class ReminderFormViewModel(
                 withContext(Dispatchers.IO) {
                     repository.insertEvent(event)
                 }
-                startScheduleNotification(event.uid, event.title, event.eventTime)
+                reminderWorkerManager.startNotificationWorker(event.uid, event.title, event.eventTime)
                 onSuccess()
             } finally {
                 _isLoading.value = false
             }
         }
-    }
-
-    fun startScheduleNotification(eventId: String, eventName: String, eventTime: String) {
-        ReminderNotificationWorker.run(
-            context,
-            eventId,
-            eventName,
-            ReminderTimeUtils.calculate10MinsDelayInMillis(eventTime)
-        )
     }
 }
