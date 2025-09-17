@@ -43,9 +43,7 @@ class ReminderFormViewModel(
                     title = _title.value,
                     eventTime = _selectedTime.value
                 )
-                withContext(Dispatchers.IO) {
-                    repository.insertEvent(event)
-                }
+                repository.insertEvent(event)
                 reminderWorkerManager.startNotificationWorker(event.uid, event.title, event.eventTime)
                 onSuccess()
             } finally {

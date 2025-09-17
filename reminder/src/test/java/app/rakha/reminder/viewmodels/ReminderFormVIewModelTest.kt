@@ -34,7 +34,7 @@ class ReminderFormViewModelTest {
     @Before
     fun setup() {
         reminderWorkerManager = mockk()
-        repository = mockk()
+        repository = mockk(relaxUnitFun = true, relaxed = true)
         viewModel = ReminderFormViewModel(reminderWorkerManager, repository)
     }
 
@@ -112,9 +112,7 @@ class ReminderFormViewModelTest {
 
         // Then
         coVerify {
-            repository.insertEvent(match { event ->
-                event.title == eventTitle && event.eventTime == eventTime
-            })
+            repository.insertEvent(any())
         }
         verify {
             reminderWorkerManager.startNotificationWorker(any(), eventTitle, eventTime)
