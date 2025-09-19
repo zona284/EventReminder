@@ -11,7 +11,7 @@ import androidx.work.WorkerParameters
 import app.rakha.reminder.ReminderTimeUtils
 import app.rakha.reminder.data.model.EventModel
 import app.rakha.reminder.data.repository.EventRepository
-import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.firstOrNull
 import java.util.concurrent.TimeUnit
 
 class ReminderScheduleWorker(
@@ -21,7 +21,7 @@ class ReminderScheduleWorker(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        val events = repository.getEvents().singleOrNull()
+        val events = repository.getEvents().firstOrNull()
         Log.d("ReminderScheduleWorker", "list of events: ${events?.size}")
 
         events?.forEach { event ->
@@ -46,7 +46,7 @@ class ReminderScheduleWorker(
             val workManager = WorkManager.getInstance(context)
             workManager.enqueueUniquePeriodicWork(
                 WORKER_TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.REPLACE,
                 request,
             )
         }

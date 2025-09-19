@@ -30,7 +30,7 @@ class ReminderViewModelTest {
 
     private lateinit var viewModel: ReminderViewModel
 
-    @MockK(relaxed = true)
+    @MockK(relaxed = true, relaxUnitFun = true)
     private lateinit var repository: EventRepository
 
     @MockK
@@ -52,8 +52,8 @@ class ReminderViewModelTest {
     fun `reminderEvents should return events from repository`() = runTest {
         // Given
         val expectedEvents = listOf(
-            EventModel(uid = "1", title = "Event 1", eventTime = "2024-01-01 09:00"),
-            EventModel(uid = "2", title = "Event 2", eventTime = "2024-01-01 10:00")
+            EventModel(uid = "1", title = "Event 1", eventTime = "09:00"),
+            EventModel(uid = "2", title = "Event 2", eventTime = "10:00")
         )
         every { repository.getEvents() } returns flowOf(expectedEvents)
         viewModel = ReminderViewModel(reminderWorkerManager, repository)
